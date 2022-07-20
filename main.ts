@@ -9,11 +9,85 @@ enum ActionKind {
     cursor_seed3,
     cursor_seed4
 }
+controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
+    if (menu == 1) {
+        itemheld += 1
+        if (itemheld == 1) {
+            animation.setAction(mySprite, ActionKind.cursor_tilledsoil)
+        } else if (itemheld == 2) {
+            animation.setAction(mySprite, ActionKind.cursor_seed1)
+        } else if (itemheld == 3) {
+            animation.setAction(mySprite, ActionKind.cursor_seed2)
+        } else if (itemheld == 4) {
+            animation.setAction(mySprite, ActionKind.cursor_seed3)
+        } else if (itemheld == 5) {
+            animation.setAction(mySprite, ActionKind.cursor_seed4)
+        } else if (itemheld > 5) {
+            itemheld = 0
+            animation.setAction(mySprite, ActionKind.cursor_none)
+        }
+    }
+})
+controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
+    if (menu == 1) {
+        if (itemheld == 1) {
+            if (mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile1`)) {
+                if (blockSettings.readNumber("numofhoe") > 0) {
+                    blockSettings.writeNumber("numofhoe", blockSettings.readNumber("numofhoe") - 1)
+                    tiles.setTileAt(mySprite.tilemapLocation(), assets.tile`myTile2`)
+                    blockSettings.writeNumber("soil at " + mySprite.tilemapLocation().column + ", " + mySprite.tilemapLocation().row, 1)
+                }
+            }
+        } else if (itemheld == 2) {
+            if (mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile2`)) {
+                if (blockSettings.readNumber("numofseed1") > 0) {
+                    blockSettings.writeNumber("numofseed1", blockSettings.readNumber("numofseed1") - 1)
+                    tiles.setTileAt(mySprite.tilemapLocation(), assets.tile`myTile3`)
+                    blockSettings.writeNumber("soil at " + mySprite.tilemapLocation().column + ", " + mySprite.tilemapLocation().row, 2)
+                    blockSettings.writeNumber("growth at " + mySprite.tilemapLocation().column + ", " + mySprite.tilemapLocation().row, 1)
+                }
+            }
+        } else if (itemheld == 3) {
+            if (mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile2`)) {
+                if (blockSettings.readNumber("numofseed2") > 0) {
+                    blockSettings.writeNumber("numofseed2", blockSettings.readNumber("numofseed2") - 1)
+                    tiles.setTileAt(mySprite.tilemapLocation(), assets.tile`myTile11`)
+                    blockSettings.writeNumber("soil at " + mySprite.tilemapLocation().column + ", " + mySprite.tilemapLocation().row, 3)
+                    blockSettings.writeNumber("growth at " + mySprite.tilemapLocation().column + ", " + mySprite.tilemapLocation().row, 1)
+                }
+            }
+        } else if (itemheld == 4) {
+            if (mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile2`)) {
+                if (blockSettings.readNumber("numofseed3") > 0) {
+                    blockSettings.writeNumber("numofseed3", blockSettings.readNumber("numofseed3") - 1)
+                    tiles.setTileAt(mySprite.tilemapLocation(), assets.tile`myTile16`)
+                    blockSettings.writeNumber("soil at " + mySprite.tilemapLocation().column + ", " + mySprite.tilemapLocation().row, 4)
+                    blockSettings.writeNumber("growth at " + mySprite.tilemapLocation().column + ", " + mySprite.tilemapLocation().row, 1)
+                }
+            }
+        } else if (itemheld == 5) {
+            if (mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile2`)) {
+                if (blockSettings.readNumber("numofseed4") > 0) {
+                    blockSettings.writeNumber("numofseed4", blockSettings.readNumber("numofseed4") - 1)
+                    tiles.setTileAt(mySprite.tilemapLocation(), assets.tile`myTile23`)
+                    blockSettings.writeNumber("soil at " + mySprite.tilemapLocation().column + ", " + mySprite.tilemapLocation().row, 5)
+                    blockSettings.writeNumber("growth at " + mySprite.tilemapLocation().column + ", " + mySprite.tilemapLocation().row, 1)
+                }
+            }
+        }
+    }
+})
+controller.menu.onEvent(ControllerButtonEvent.Pressed, function () {
+	
+})
 let heldnum = 0
 let heldstring = ""
+let itemheld = 0
+let mySprite: Sprite = null
 let LoadRow = 0
 let LoadCol = 0
 let menu = 0
+menu = 0
 scene.setBackgroundImage(img`
     9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
     9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
@@ -138,7 +212,7 @@ scene.setBackgroundImage(img`
     `)
 tiles.setCurrentTilemap(tileUtil.createSmallMap(tilemap`level1`))
 if (blockSettings.exists("Played Before")) {
-    story.showPlayerChoices("Continue", "New Game")
+    story.showPlayerChoices("Continue", "New Game", "Reset Game")
 } else {
     story.showPlayerChoices("New Game", "")
 }
@@ -193,10 +267,10 @@ if (story.checkLastAnswer("Continue")) {
     blockSettings.clear()
     blockSettings.writeNumber("Played Before", 1)
     blockSettings.writeNumber("numofhoe", 3)
-    blockSettings.writeNumber("numofseed1", 1)
-    blockSettings.writeNumber("numofseed2", 1)
-    blockSettings.writeNumber("numofseed3", 1)
-    blockSettings.writeNumber("numofseed4", 1)
+    blockSettings.writeNumber("numofseed1", 3)
+    blockSettings.writeNumber("numofseed2", 0)
+    blockSettings.writeNumber("numofseed3", 0)
+    blockSettings.writeNumber("numofseed4", 0)
     LoadCol = 1
     LoadRow = 8
     for (let index = 0; index < 6; index++) {
@@ -208,8 +282,11 @@ if (story.checkLastAnswer("Continue")) {
         LoadCol = 1
         LoadRow += 1
     }
+} else if (story.checkLastAnswer("Reset Game")) {
+    blockSettings.clear()
+    game.reset()
 }
-let mySprite = sprites.create(img`
+mySprite = sprites.create(img`
     . . . . . . . . 
     . . . . . . . . 
     . . . . . . . . 
@@ -231,16 +308,26 @@ anim.addAnimationFrame(img`
     . . . . . . . . 
     `)
 animation.attachAnimation(mySprite, anim)
-let anim2 = animation.createAnimation(ActionKind.cursor_tilledsoil, 1000)
+let anim2 = animation.createAnimation(ActionKind.cursor_tilledsoil, 500)
 anim2.addAnimationFrame(img`
     . f f f f f f . 
     . f e b b b f . 
-    . f e 1 1 b f . 
-    . f e 1 1 1 f . 
-    . f e 1 1 1 f . 
-    . f e 1 1 1 f . 
-    . f e 1 1 1 f . 
-    . f f f f f f . 
+    . f e f f b f . 
+    . f e f . f f . 
+    . f e f . . . . 
+    . f e f . . . . 
+    . f e f . . . . 
+    . f f f . . . . 
+    `)
+anim2.addAnimationFrame(img`
+    . . . f f f f . 
+    . . f e b b f . 
+    . . f e b b b f 
+    . f e f f b f . 
+    . f e f . f . . 
+    f e f . . . . . 
+    f e f . . . . . 
+    f f f . . . . . 
     `)
 animation.attachAnimation(mySprite, anim2)
 let anim3 = animation.createAnimation(ActionKind.cursor_seed1, 1000)
@@ -280,7 +367,7 @@ anim5.addAnimationFrame(img`
     `)
 animation.attachAnimation(mySprite, anim5)
 let anim6 = animation.createAnimation(ActionKind.cursor_seed4, 1000)
-anim5.addAnimationFrame(img`
+anim6.addAnimationFrame(img`
     . f f f f f f . 
     . f 6 c c 6 f . 
     . f c 1 1 c f . 
@@ -296,9 +383,9 @@ let textSprite = textsprite.create("Nothing", 15, 1)
 grid.snap(textSprite)
 grid.snap(mySprite)
 grid.moveWithButtons(mySprite)
-let itemheld = 0
+itemheld = 0
 menu = 1
-game.onUpdateInterval(500, function () {
+game.onUpdateInterval(100, function () {
     if (menu == 1) {
         grid.place(textSprite, tiles.getTileLocation(mySprite.tilemapLocation().getNeighboringLocation(CollisionDirection.Top).column, mySprite.tilemapLocation().getNeighboringLocation(CollisionDirection.Top).row))
         if (itemheld == 0) {
