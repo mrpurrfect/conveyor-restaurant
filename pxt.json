@@ -7,7 +7,9 @@
         "settings-blocks": "github:microsoft/pxt-settings-blocks#v1.0.0",
         "arcade-tile-util": "github:microsoft/arcade-tile-util#v1.0.1",
         "arcade-text": "github:microsoft/arcade-text#v1.3.0",
-        "arcade-background-scroll": "github:microsoft/arcade-background-scroll#6cfbf925b9a4d5ddf3e1078e6cf6ca6a1aebb301"
+        "arcade-background-scroll": "github:microsoft/arcade-background-scroll#6cfbf925b9a4d5ddf3e1078e6cf6ca6a1aebb301",
+        "arcade-story": "github:microsoft/arcade-storytelling#v1.0.3",
+        "Sprite Grid": "github:microsoft/arcade-grid#v1.3.0"
     },
     "files": [
         "main.blocks",
