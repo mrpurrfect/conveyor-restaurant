@@ -249,6 +249,60 @@
         "tilemapTile": true,
         "displayName": "myTile38"
     },
+    "tile41": {
+        "data": "hwQIAAgAAADu7u7u/u7v7u7v/u7u7/Lu/uLv7v7u7+7uL/7u7u7u7g==",
+        "mimeType": "image/x-mkcd-f4",
+        "tilemapTile": true,
+        "displayName": "myTile39"
+    },
+    "tile42": {
+        "data": "hwQIAAgAAADu7u7u/nfn7n53fe5+fXfufnd37n7Xd+7ud/fu7u7u7g==",
+        "mimeType": "image/x-mkcd-f4",
+        "tilemapTile": true,
+        "displayName": "myTile40"
+    },
+    "tile45": {
+        "data": "hwQIAAgAAADu7u7u/nfn7n53cu5+cnfufnd37n4nd+7ud/fu7u7u7g==",
+        "mimeType": "image/x-mkcd-f4",
+        "tilemapTile": true,
+        "displayName": "myTile43"
+    },
+    "tile46": {
+        "data": "hwQIAAgAAADu7u7u/u7v7u7v/u7u7/ju/ujv7v7u7+7uj/7u7u7u7g==",
+        "mimeType": "image/x-mkcd-f4",
+        "tilemapTile": true,
+        "displayName": "myTile44"
+    },
+    "tile47": {
+        "data": "hwQIAAgAAADu7u7u/nfn7n53du5+dnfufnd37n5nd+7ud/fu7u7u7g==",
+        "mimeType": "image/x-mkcd-f4",
+        "tilemapTile": true,
+        "displayName": "myTile45"
+    },
+    "tile48": {
+        "data": "hwQIAAgAAADu7u7u/nfn7n53eO5+eHfufnd37n6Hd+7ud/fu7u7u7g==",
+        "mimeType": "image/x-mkcd-f4",
+        "tilemapTile": true,
+        "displayName": "myTile46"
+    },
+    "tile54": {
+        "data": "hwQIAAgAAADu7u7u/u7v7u7v/u7u7/ru/urv7v7u7+7ur/7u7u7u7g==",
+        "mimeType": "image/x-mkcd-f4",
+        "tilemapTile": true,
+        "displayName": "myTile52"
+    },
+    "tile56": {
+        "data": "hwQIAAgAAADu7u7u/nfn7n53eu5+enfufnd37n6nd+7ud/fu7u7u7g==",
+        "mimeType": "image/x-mkcd-f4",
+        "tilemapTile": true,
+        "displayName": "myTile54"
+    },
+    "tile55": {
+        "data": "hwQIAAgAAADu7u7u/nfn7n53e+5+e3fufnd37n63d+7ud/fu7u7u7g==",
+        "mimeType": "image/x-mkcd-f4",
+        "tilemapTile": true,
+        "displayName": "myTile53"
+    },
     "level2": {
         "id": "level2",
         "mimeType": "application/mkcd-tilemap",
@@ -472,9 +526,8 @@
             "myTiles.transparency8",
             "myTiles.tile2",
             "myTiles.tile1",
-            "myTiles.tile28",
-            "myTiles.tile39",
-            "myTiles.tile40"
+            "myTiles.tile55",
+            "myTiles.tile56"
         ],
         "displayName": "level1"
     },

@@ -9,7 +9,10 @@ enum ActionKind {
     cursor_seed3,
     cursor_seed4,
     cursor_fertilizer,
-    cursor_seed5
+    cursor_seed5,
+    cursor_seed6,
+    cursor_seed7,
+    cursor_seed8
 }
 namespace SpriteKind {
     export const Info = SpriteKind.create()
@@ -30,8 +33,14 @@ controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
         } else if (itemheld == 6) {
             animation.setAction(mySprite, ActionKind.cursor_seed5)
         } else if (itemheld == 7) {
+            animation.setAction(mySprite, ActionKind.cursor_seed6)
+        } else if (itemheld == 8) {
+            animation.setAction(mySprite, ActionKind.cursor_seed7)
+        } else if (itemheld == 9) {
+            animation.setAction(mySprite, ActionKind.cursor_seed8)
+        } else if (itemheld == 10) {
             animation.setAction(mySprite, ActionKind.cursor_fertilizer)
-        } else if (itemheld > 7) {
+        } else if (itemheld > 10) {
             itemheld = 0
             animation.setAction(mySprite, ActionKind.cursor_none)
         }
@@ -86,17 +95,44 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
         } else if (itemheld == 6) {
             if (mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile2`)) {
                 if (blockSettings.readNumber("numofseed5") > 0) {
-                    blockSettings.writeNumber("numofseed5", blockSettings.readNumber("numofseed4") - 1)
+                    blockSettings.writeNumber("numofseed5", blockSettings.readNumber("numofseed5") - 1)
                     tiles.setTileAt(mySprite.tilemapLocation(), assets.tile`myTile26`)
                     blockSettings.writeNumber("soil at " + mySprite.tilemapLocation().column + ", " + mySprite.tilemapLocation().row, 6)
                     blockSettings.writeNumber("growth at " + mySprite.tilemapLocation().column + ", " + mySprite.tilemapLocation().row, 1)
                 }
             }
         } else if (itemheld == 7) {
+            if (mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile2`)) {
+                if (blockSettings.readNumber("numofseed6") > 0) {
+                    blockSettings.writeNumber("numofseed6", blockSettings.readNumber("numofseed6") - 1)
+                    tiles.setTileAt(mySprite.tilemapLocation(), assets.tile`myTile39`)
+                    blockSettings.writeNumber("soil at " + mySprite.tilemapLocation().column + ", " + mySprite.tilemapLocation().row, 6)
+                    blockSettings.writeNumber("growth at " + mySprite.tilemapLocation().column + ", " + mySprite.tilemapLocation().row, 1)
+                }
+            }
+        } else if (itemheld == 8) {
+            if (mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile2`)) {
+                if (blockSettings.readNumber("numofseed7") > 0) {
+                    blockSettings.writeNumber("numofseed7", blockSettings.readNumber("numofseed7") - 1)
+                    tiles.setTileAt(mySprite.tilemapLocation(), assets.tile`myTile44`)
+                    blockSettings.writeNumber("soil at " + mySprite.tilemapLocation().column + ", " + mySprite.tilemapLocation().row, 6)
+                    blockSettings.writeNumber("growth at " + mySprite.tilemapLocation().column + ", " + mySprite.tilemapLocation().row, 1)
+                }
+            }
+        } else if (itemheld == 9) {
+            if (mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile2`)) {
+                if (blockSettings.readNumber("numofseed8") > 0) {
+                    blockSettings.writeNumber("numofseed8", blockSettings.readNumber("numofseed8") - 1)
+                    tiles.setTileAt(mySprite.tilemapLocation(), assets.tile`myTile52`)
+                    blockSettings.writeNumber("soil at " + mySprite.tilemapLocation().column + ", " + mySprite.tilemapLocation().row, 6)
+                    blockSettings.writeNumber("growth at " + mySprite.tilemapLocation().column + ", " + mySprite.tilemapLocation().row, 1)
+                }
+            }
+        } else if (itemheld == 10) {
             if (blockSettings.readNumber("numoffertilizer") > 0) {
-                if (mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile3`) || (mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile11`) || (mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile16`) || mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile23`))) || (mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile6`) || (mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile14`) || (mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile19`) || (mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile24`) || (mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile26`) || mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile37`))))))) {
+                if (mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile3`) || (mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile11`) || (mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile16`) || mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile23`))) || (mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile6`) || (mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile14`) || (mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile19`) || (mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile24`) || (mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile26`) || (mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile37`) || (mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile39`) || mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile40`) || (mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile44`) || mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile45`) || (mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile52`) || mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile53`))))))))))) {
                     blockSettings.writeNumber("numoffertilizer", blockSettings.readNumber("numoffertilizer") - 1)
-                    if (mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile3`) || (mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile11`) || (mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile16`) || (mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile23`) || mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile26`))))) {
+                    if (mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile3`) || (mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile11`) || (mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile16`) || (mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile23`) || (mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile26`) || (mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile39`) || (mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile44`) || mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile52`)))))))) {
                         blockSettings.writeNumber("growth at " + mySprite.tilemapLocation().column + ", " + mySprite.tilemapLocation().row, 2)
                         if (mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile3`)) {
                             tiles.setTileAt(mySprite.tilemapLocation(), assets.tile`myTile6`)
@@ -106,8 +142,16 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
                             tiles.setTileAt(mySprite.tilemapLocation(), assets.tile`myTile19`)
                         } else if (mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile23`)) {
                             tiles.setTileAt(mySprite.tilemapLocation(), assets.tile`myTile24`)
+                        } else if (mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile39`)) {
+                            tiles.setTileAt(mySprite.tilemapLocation(), assets.tile`myTile40`)
+                        } else if (mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile44`)) {
+                            tiles.setTileAt(mySprite.tilemapLocation(), assets.tile`myTile45`)
+                        } else if (mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile52`)) {
+                            tiles.setTileAt(mySprite.tilemapLocation(), assets.tile`myTile53`)
+                        } else if (mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile26`)) {
+                            tiles.setTileAt(mySprite.tilemapLocation(), assets.tile`myTile37`)
                         }
-                    } else if (mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile6`) || (mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile14`) || (mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile19`) || (mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile24`) || mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile37`))))) {
+                    } else if (mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile6`) || (mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile14`) || (mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile19`) || (mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile24`) || (mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile37`) || (mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile40`) || (mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile45`) || mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile53`)))))))) {
                         blockSettings.writeNumber("growth at " + mySprite.tilemapLocation().column + ", " + mySprite.tilemapLocation().row, 3)
                         if (mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile6`)) {
                             tiles.setTileAt(mySprite.tilemapLocation(), assets.tile`myTile8`)
@@ -117,6 +161,14 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
                             tiles.setTileAt(mySprite.tilemapLocation(), assets.tile`myTile21`)
                         } else if (mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile24`)) {
                             tiles.setTileAt(mySprite.tilemapLocation(), assets.tile`myTile25`)
+                        } else if (mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile37`)) {
+                            tiles.setTileAt(mySprite.tilemapLocation(), assets.tile`myTile38`)
+                        } else if (mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile40`)) {
+                            tiles.setTileAt(mySprite.tilemapLocation(), assets.tile`myTile43`)
+                        } else if (mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile45`)) {
+                            tiles.setTileAt(mySprite.tilemapLocation(), assets.tile`myTile46`)
+                        } else if (mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile53`)) {
+                            tiles.setTileAt(mySprite.tilemapLocation(), assets.tile`myTile54`)
                         }
                     }
                 }
@@ -133,6 +185,12 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
                 blockSettings.writeNumber("milk", blockSettings.readNumber("milk") + 1)
             } else if (mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile38`)) {
                 blockSettings.writeNumber("sugar", blockSettings.readNumber("sugar") + 1)
+            } else if (mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile43`)) {
+                blockSettings.writeNumber("strawberry", blockSettings.readNumber("strawberry") + 1)
+            } else if (mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile46`)) {
+                blockSettings.writeNumber("blueberry", blockSettings.readNumber("blueberry") + 1)
+            } else if (mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile54`)) {
+                blockSettings.writeNumber("grape", blockSettings.readNumber("grape") + 1)
             }
             tiles.setTileAt(mySprite.tilemapLocation(), assets.tile`myTile2`)
         }
@@ -155,9 +213,19 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
             } else if (see_recipe == "bagel") {
                 game.splash("BAGEL", "Needs: 2 wheat")
             } else if (see_recipe == "bagelsandwich") {
-                game.splash("BAGEL EGG SANDWICH", "Needs: 2 wheat, 1 egg")
+                game.splash("BAGEL SANDWICH", "Needs: 2 wheat, 1 egg")
             } else if (see_recipe == "bagelsandwichdx") {
-                game.splash("BAGEL EGG SANDWICH DX", "Needs: 2 wheat, 1 egg, 1 bacon")
+                game.splash("BAGEL SANDWICH DX", "Needs: 2 wheat, 1 egg, 1 bacon")
+            } else if (see_recipe == "pancake") {
+                game.splash("PANCAKE", "Needs: 2 batter")
+            } else if (see_recipe == "batter") {
+                game.splash("BATTER (x3)", "Needs: 1 wheat, 1 egg, 1 milk, 1 sugar")
+            } else if (see_recipe == "pancakedx") {
+                game.splash("PANCAKE DX", "Needs: 2 batter, 1 strawberry, 1 blueberry")
+            } else if (see_recipe == "berrybowl") {
+                game.splash("BERRY BOWL", "Needs: 1 strawberry, 1 blueberry, 1 grape")
+            } else if (see_recipe == "frenchtoast") {
+                game.splash("FRENCH TOAST", "Needs: 1 batter")
             } else {
                 game.splash("THAT IS NOT A VALID RECIPE", "Try again.")
             }
@@ -551,11 +619,35 @@ if (story.checkLastAnswer("Continue")) {
                 }
             } else if (blockSettings.readNumber("soil at " + LoadCol + ", " + LoadRow) == 6) {
                 if (blockSettings.readNumber("growth at " + LoadCol + ", " + LoadRow) == 1) {
+                    tiles.setTileAt(tiles.getTileLocation(LoadCol, LoadRow), assets.tile`myTile39`)
+                } else if (blockSettings.readNumber("growth at " + LoadCol + ", " + LoadRow) == 2) {
+                    tiles.setTileAt(tiles.getTileLocation(LoadCol, LoadRow), assets.tile`myTile40`)
+                } else if (blockSettings.readNumber("growth at " + LoadCol + ", " + LoadRow) == 3) {
+                    tiles.setTileAt(tiles.getTileLocation(LoadCol, LoadRow), assets.tile`myTile43`)
+                }
+            } else if (blockSettings.readNumber("soil at " + LoadCol + ", " + LoadRow) == 7) {
+                if (blockSettings.readNumber("growth at " + LoadCol + ", " + LoadRow) == 1) {
                     tiles.setTileAt(tiles.getTileLocation(LoadCol, LoadRow), assets.tile`myTile26`)
                 } else if (blockSettings.readNumber("growth at " + LoadCol + ", " + LoadRow) == 2) {
                     tiles.setTileAt(tiles.getTileLocation(LoadCol, LoadRow), assets.tile`myTile37`)
                 } else if (blockSettings.readNumber("growth at " + LoadCol + ", " + LoadRow) == 3) {
                     tiles.setTileAt(tiles.getTileLocation(LoadCol, LoadRow), assets.tile`myTile38`)
+                }
+            } else if (blockSettings.readNumber("soil at " + LoadCol + ", " + LoadRow) == 8) {
+                if (blockSettings.readNumber("growth at " + LoadCol + ", " + LoadRow) == 1) {
+                    tiles.setTileAt(tiles.getTileLocation(LoadCol, LoadRow), assets.tile`myTile44`)
+                } else if (blockSettings.readNumber("growth at " + LoadCol + ", " + LoadRow) == 2) {
+                    tiles.setTileAt(tiles.getTileLocation(LoadCol, LoadRow), assets.tile`myTile45`)
+                } else if (blockSettings.readNumber("growth at " + LoadCol + ", " + LoadRow) == 3) {
+                    tiles.setTileAt(tiles.getTileLocation(LoadCol, LoadRow), assets.tile`myTile46`)
+                }
+            } else if (blockSettings.readNumber("soil at " + LoadCol + ", " + LoadRow) == 9) {
+                if (blockSettings.readNumber("growth at " + LoadCol + ", " + LoadRow) == 1) {
+                    tiles.setTileAt(tiles.getTileLocation(LoadCol, LoadRow), assets.tile`myTile52`)
+                } else if (blockSettings.readNumber("growth at " + LoadCol + ", " + LoadRow) == 2) {
+                    tiles.setTileAt(tiles.getTileLocation(LoadCol, LoadRow), assets.tile`myTile53`)
+                } else if (blockSettings.readNumber("growth at " + LoadCol + ", " + LoadRow) == 3) {
+                    tiles.setTileAt(tiles.getTileLocation(LoadCol, LoadRow), assets.tile`myTile54`)
                 }
             }
             LoadCol += 1
@@ -572,11 +664,18 @@ if (story.checkLastAnswer("Continue")) {
     blockSettings.writeNumber("numofseed3", 3)
     blockSettings.writeNumber("numofseed4", 0)
     blockSettings.writeNumber("numofseed5", 0)
+    blockSettings.writeNumber("numofseed6", 0)
+    blockSettings.writeNumber("numofseed7", 0)
+    blockSettings.writeNumber("numofseed8", 0)
     blockSettings.writeNumber("numoffertilizer", 18)
     blockSettings.writeNumber("wheat", 0)
     blockSettings.writeNumber("egg", 0)
     blockSettings.writeNumber("bacon", 0)
     blockSettings.writeNumber("milk", 0)
+    blockSettings.writeNumber("batter", 0)
+    blockSettings.writeNumber("strawberry", 0)
+    blockSettings.writeNumber("blueberry", 0)
+    blockSettings.writeNumber("grape", 0)
     blockSettings.writeNumber("nextlevel", 1)
     blockSettings.writeNumber("money", 1)
     LoadCol = 1
@@ -700,6 +799,42 @@ anim8.addAnimationFrame(img`
     . f f f f f f . 
     `)
 animation.attachAnimation(mySprite, anim8)
+let anim9 = animation.createAnimation(ActionKind.cursor_seed6, 1000)
+anim9.addAnimationFrame(img`
+    . f f f f f f . 
+    . f 6 6 6 6 f . 
+    . f 7 7 7 2 f . 
+    . f 2 7 7 7 f . 
+    . f 7 7 2 7 f . 
+    . f 7 7 7 7 f . 
+    . f 6 6 6 6 f . 
+    . f f f f f f . 
+    `)
+animation.attachAnimation(mySprite, anim9)
+let anim10 = animation.createAnimation(ActionKind.cursor_seed7, 1000)
+anim10.addAnimationFrame(img`
+    . f f f f f f . 
+    . f 6 6 6 6 f . 
+    . f 7 7 7 8 f . 
+    . f 8 7 7 7 f . 
+    . f 7 7 8 7 f . 
+    . f 7 7 7 7 f . 
+    . f 6 6 6 6 f . 
+    . f f f f f f . 
+    `)
+animation.attachAnimation(mySprite, anim10)
+let anim11 = animation.createAnimation(ActionKind.cursor_seed8, 1000)
+anim11.addAnimationFrame(img`
+    . f f f f f f . 
+    . f 6 6 6 6 f . 
+    . f 7 7 7 a f . 
+    . f a 7 7 7 f . 
+    . f 7 7 a 7 f . 
+    . f 7 7 7 7 f . 
+    . f 6 6 6 6 f . 
+    . f f f f f f . 
+    `)
+animation.attachAnimation(mySprite, anim11)
 let anim7 = animation.createAnimation(ActionKind.cursor_fertilizer, 1000)
 anim7.addAnimationFrame(img`
     . f f f f f f . 
@@ -755,6 +890,15 @@ game.onUpdateInterval(100, function () {
             heldstring = "Sugar"
             heldnum = blockSettings.readNumber("numofseed5")
         } else if (itemheld == 7) {
+            heldstring = "Strawberry"
+            heldnum = blockSettings.readNumber("numofseed6")
+        } else if (itemheld == 8) {
+            heldstring = "Blueberry"
+            heldnum = blockSettings.readNumber("numofseed7")
+        } else if (itemheld == 9) {
+            heldstring = "Grape"
+            heldnum = blockSettings.readNumber("numofseed8")
+        } else if (itemheld == 10) {
             heldstring = "Fertilizer"
             heldnum = blockSettings.readNumber("numoffertilizer")
         }
