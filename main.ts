@@ -16,6 +16,7 @@ enum ActionKind {
 }
 namespace SpriteKind {
     export const Info = SpriteKind.create()
+    export const Person = SpriteKind.create()
 }
 controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
     if (menu == 1) {
@@ -226,9 +227,56 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
                 game.splash("BERRY BOWL", "Needs: 1 strawberry, 1 blueberry, 1 grape")
             } else if (see_recipe == "frenchtoast") {
                 game.splash("FRENCH TOAST", "Needs: 1 batter")
+            } else if (see_recipe == "blueberrybread") {
+                game.splash("BLUEBERRY BREAD", "Needs: 1 wheat, 1 blueberry, 1 sugar")
+            } else if (see_recipe == "strawberrybread") {
+                game.splash("STRAWBERRY BREAD", "Needs: 1 wheat, 1 strawberry, 1 sugar")
+            } else if (see_recipe == "raisinbread") {
+                game.splash("RAISIN BREAD", "Needs: 1 wheat, 1 grape, 1 sugar")
             } else {
-                game.splash("THAT IS NOT A VALID RECIPE", "Try again.")
+                game.splash("\"" + see_recipe + "\" IS NOT A VALID RECIPE", "(remember: no caps or spaces)")
             }
+        } else if (mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile9`) || mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile10`)) {
+            game.setDialogFrame(img`
+                ..bbbbbbbbbbbbbbbbbbbb..
+                .bd111111111111111111db.
+                bd1dbbbbbbbbbbbbbbbbd1db
+                b1dbbbbbbbbbbbbbbbbbbd1b
+                b1bd1111111111111111db1b
+                b1b111111111111111111b1b
+                b1b111111111111111111b1b
+                b1b111111111111111111b1b
+                b1b111111111111111111b1b
+                b1b111111111111111111b1b
+                b1b111111111111111111b1b
+                b1b111111111111111111b1b
+                b1b111111111111111111b1b
+                b1b111111111111111111b1b
+                b1b111111111111111111b1b
+                b1b111111111111111111b1b
+                b1b111111111111111111b1b
+                b1b111111111111111111b1b
+                b1b111111111111111111b1b
+                b1bd1111111111111111db1b
+                bd1bbbbbbbbbbbbbbbbbb1db
+                bbd111111111111111111dbb
+                .bbbbbbbbbbbbbbbbbbbbbb.
+                ..bbbbbbbbbbbbbbbbbbbb..
+                `)
+            game.setDialogCursor(img`
+                . . . . . . . . 
+                . . . . . . . . 
+                . . f f f f . . 
+                . . f 1 1 f . . 
+                . . f 1 1 f . . 
+                . . f f f f . . 
+                . . . . . . . . 
+                . . . . . . . . 
+                `)
+            game.showLongText("All Ingredients: " + convertToText(blockSettings.readNumber("wheat")) + " wheat, " + convertToText(blockSettings.readNumber("egg")) + " egg, " + convertToText(blockSettings.readNumber("bacon")) + " bacon, " + convertToText(blockSettings.readNumber("milk")) + " milk, " + convertToText(blockSettings.readNumber("sugar")) + " sugar, " + convertToText(blockSettings.readNumber("strawberry")) + " strawberry, " + convertToText(blockSettings.readNumber("blueberry")) + " blueberry, " + convertToText(blockSettings.readNumber("grape")) + " grape, " + convertToText(blockSettings.readNumber("batter")) + " batter. ", DialogLayout.Full)
+            game.showLongText("All Items: " + convertToText(blockSettings.readNumber("numofseed1")) + " wheat seed, " + convertToText(blockSettings.readNumber("numofseed2")) + " egg seed, " + convertToText(blockSettings.readNumber("numofseed3")) + " bacon seed, " + convertToText(blockSettings.readNumber("numofseed4")) + " milk seed, " + convertToText(blockSettings.readNumber("numofseed5")) + " sugar seed, " + convertToText(blockSettings.readNumber("numofseed6")) + " strawberry seed, " + convertToText(blockSettings.readNumber("numofseed7")) + " blueberry seed, " + convertToText(blockSettings.readNumber("numofseed8")) + " grape seed, " + convertToText(blockSettings.readNumber("numofhoe")) + " hoe, " + convertToText(blockSettings.readNumber("numoffertilizer")) + " fertilizer.", DialogLayout.Full)
+        } else if (mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile12`)) {
+        	
         }
     }
 })
@@ -425,24 +473,32 @@ controller.menu.onEvent(ControllerButtonEvent.Pressed, function () {
                 `)
             if (blockSettings.readNumber("nextlevel") == 1) {
                 tiles.setCurrentTilemap(tileUtil.createSmallMap(tilemap`level22`))
+                numofspots = 1
             }
         }
     } else if (menu == 2) {
         if (game.ask("OPEN RESTAURANT?", "A = Confirm B = Cancel")) {
-        	
+            numofemptyspots = numofspots
+            menu = 3
         }
     }
 })
 let heldnum = 0
 let heldstring = ""
+let Person: Sprite = null
+let personimg: Image = null
+let persontype = 0
+let numofemptyspots = 0
 let see_recipe = ""
 let itemheld = 0
 let textSprite: TextSprite = null
 let mySprite: Sprite = null
 let LoadRow = 0
 let LoadCol = 0
+let numofspots = 0
 let menu = 0
 menu = 0
+numofspots = 1
 scene.setBackgroundImage(img`
     9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
     9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
@@ -676,8 +732,9 @@ if (story.checkLastAnswer("Continue")) {
     blockSettings.writeNumber("strawberry", 0)
     blockSettings.writeNumber("blueberry", 0)
     blockSettings.writeNumber("grape", 0)
+    blockSettings.writeNumber("sugar", 0)
     blockSettings.writeNumber("nextlevel", 1)
-    blockSettings.writeNumber("money", 1)
+    blockSettings.writeNumber("money", 0)
     LoadCol = 1
     LoadRow = 8
     for (let index = 0; index < 6; index++) {
@@ -865,6 +922,60 @@ grid.snap(mySprite)
 grid.moveWithButtons(mySprite)
 itemheld = 0
 menu = 1
+game.onUpdateInterval(randint(5000 / numofspots, 20000 / numofspots), function () {
+    if (menu == 3) {
+        if (numofemptyspots > 0) {
+            persontype = randint(1, 4)
+            if (persontype == 1) {
+                personimg = img`
+                    . . 2 2 2 2 . . 
+                    . . d f d f . . 
+                    . . d d d d . . 
+                    . 2 2 2 2 2 2 . 
+                    . d 2 2 2 2 d . 
+                    . d 2 2 2 2 d . 
+                    . . 8 8 8 8 . . 
+                    . . 8 . . 8 . . 
+                    `
+            } else if (persontype == 2) {
+                personimg = img`
+                    . . 5 5 5 5 . . 
+                    . . d f d f . . 
+                    . . d d d d . . 
+                    . 5 5 5 5 5 5 . 
+                    . d 5 5 5 5 d . 
+                    . d 5 5 5 5 d . 
+                    . . 6 6 6 6 . . 
+                    . . 6 . . 6 . . 
+                    `
+            } else if (persontype == 3) {
+                personimg = img`
+                    . . 4 4 4 4 . . 
+                    . . d f d f . . 
+                    . . d d d d . . 
+                    . 4 4 4 4 4 4 . 
+                    . d 4 4 4 4 d . 
+                    . d 4 4 4 4 d . 
+                    . . c c c c . . 
+                    . . c . . c . . 
+                    `
+            } else if (persontype == 4) {
+                personimg = img`
+                    . . 3 3 3 3 . . 
+                    . . d f d f . . 
+                    . . d d d d . . 
+                    . 3 3 3 3 3 3 . 
+                    . d 3 3 3 3 d . 
+                    . d 3 3 3 3 d . 
+                    . . b b b b . . 
+                    . . b . . b . . 
+                    `
+            }
+            Person = sprites.create(personimg, SpriteKind.Person)
+            tiles.placeOnRandomTile(Person, assets.tile`myTile32`)
+        }
+    }
+})
 game.onUpdateInterval(100, function () {
     if (menu == 1) {
         grid.place(textSprite, tiles.getTileLocation(mySprite.tilemapLocation().getNeighboringLocation(CollisionDirection.Top).column, mySprite.tilemapLocation().getNeighboringLocation(CollisionDirection.Top).row))
