@@ -17,6 +17,7 @@ enum ActionKind {
 namespace SpriteKind {
     export const Info = SpriteKind.create()
     export const Person = SpriteKind.create()
+    export const Nothing = SpriteKind.create()
 }
 controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
     if (menu == 1) {
@@ -207,8 +208,8 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
                 game.splash("EGGS AND BACON", "Needs: 1 egg, 1 bacon")
             } else if (see_recipe == "goldmineeggs") {
                 game.splash("GOLD MINE EGGS", "Needs: 1 egg, 1 wheat")
-            } else if (see_recipe == "cheesyeggs") {
-                game.splash("CHEESY EGGS", "Needs: 1 egg, 1 milk")
+            } else if (see_recipe == "scrambledegg") {
+                game.splash("SCRAMBLED EGG", "Needs: 1 egg, 1 milk")
             } else if (see_recipe == "butterbread") {
                 game.splash("BUTTER BREAD", "Needs: 1 wheat, 1 milk")
             } else if (see_recipe == "bagel") {
@@ -276,7 +277,63 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
             game.showLongText("All Ingredients: " + convertToText(blockSettings.readNumber("wheat")) + " wheat, " + convertToText(blockSettings.readNumber("egg")) + " egg, " + convertToText(blockSettings.readNumber("bacon")) + " bacon, " + convertToText(blockSettings.readNumber("milk")) + " milk, " + convertToText(blockSettings.readNumber("sugar")) + " sugar, " + convertToText(blockSettings.readNumber("strawberry")) + " strawberry, " + convertToText(blockSettings.readNumber("blueberry")) + " blueberry, " + convertToText(blockSettings.readNumber("grape")) + " grape, " + convertToText(blockSettings.readNumber("batter")) + " batter. ", DialogLayout.Full)
             game.showLongText("All Items: " + convertToText(blockSettings.readNumber("numofseed1")) + " wheat seed, " + convertToText(blockSettings.readNumber("numofseed2")) + " egg seed, " + convertToText(blockSettings.readNumber("numofseed3")) + " bacon seed, " + convertToText(blockSettings.readNumber("numofseed4")) + " milk seed, " + convertToText(blockSettings.readNumber("numofseed5")) + " sugar seed, " + convertToText(blockSettings.readNumber("numofseed6")) + " strawberry seed, " + convertToText(blockSettings.readNumber("numofseed7")) + " blueberry seed, " + convertToText(blockSettings.readNumber("numofseed8")) + " grape seed, " + convertToText(blockSettings.readNumber("numofhoe")) + " hoe, " + convertToText(blockSettings.readNumber("numoffertilizer")) + " fertilizer.", DialogLayout.Full)
         } else if (mySprite.tileKindAt(TileDirection.Center, assets.tile`myTile12`)) {
-        	
+            Cooking_Items = sprites.create(img`
+                . 
+                `, SpriteKind.Nothing)
+            Reset_Cooking_Items()
+            while (!(story.getLastAnswer().includes("Cook"))) {
+                story.showPlayerChoices("Cook with " + convertToText(sprites.readDataNumber(Cooking_Items, "Wheat") + (sprites.readDataNumber(Cooking_Items, "Sugar") + sprites.readDataNumber(Cooking_Items, "Batter")) + (sprites.readDataNumber(Cooking_Items, "Bacon") + (sprites.readDataNumber(Cooking_Items, "Egg") + sprites.readDataNumber(Cooking_Items, "Milk")) + (sprites.readDataNumber(Cooking_Items, "Strawberry") + (sprites.readDataNumber(Cooking_Items, "Blueberry") + sprites.readDataNumber(Cooking_Items, "Grape"))))) + " items", "Basic Items", "From Animals", "Fruit And Veggie")
+                if (story.checkLastAnswer("Basic Items")) {
+                    story.showPlayerChoices("Wheat", "Sugar", "Batter")
+                } else if (story.checkLastAnswer("From Animals")) {
+                    story.showPlayerChoices("Bacon", "Egg", "Milk")
+                } else if (story.checkLastAnswer("Fruit And Veggie")) {
+                    story.showPlayerChoices("Small Fruits", "")
+                    if (story.checkLastAnswer("Small Fruits")) {
+                        story.showPlayerChoices("Strawberry", "Blueberry", "Grape")
+                    }
+                }
+                if (!(story.getLastAnswer().includes("Cook"))) {
+                    sprites.setDataNumber(Cooking_Items, story.getLastAnswer(), game.askForNumber("Use how much " + story.getLastAnswer() + "?", 1))
+                    while (!(Input_1_Is_Between_Inputs_2_and_3(sprites.readDataNumber(Cooking_Items, story.getLastAnswer()), 0, Math.constrain(sprites.readDataNumber(Cooking_Items, "" + story.getLastAnswer() + "v"), 0, 9)))) {
+                        game.splash("INVALID NUMBER", "You have either chosen an invalid number or want to use more than you have.")
+                        sprites.setDataNumber(Cooking_Items, story.getLastAnswer(), game.askForNumber("Use how much " + story.getLastAnswer() + "?", 1))
+                    }
+                } else {
+                    game.splash("COOK WITH " + convertToText(sprites.readDataNumber(Cooking_Items, "Wheat") + (sprites.readDataNumber(Cooking_Items, "Sugar") + sprites.readDataNumber(Cooking_Items, "Batter")) + (sprites.readDataNumber(Cooking_Items, "Bacon") + (sprites.readDataNumber(Cooking_Items, "Egg") + sprites.readDataNumber(Cooking_Items, "Milk")) + (sprites.readDataNumber(Cooking_Items, "Strawberry") + (sprites.readDataNumber(Cooking_Items, "Blueberry") + sprites.readDataNumber(Cooking_Items, "Grape"))))) + " ITEMS", "" + convertToText(sprites.readDataNumber(Cooking_Items, "Wheat")) + " Wheat, " + convertToText(sprites.readDataNumber(Cooking_Items, "Sugar")) + " Sugar, " + convertToText(sprites.readDataNumber(Cooking_Items, "Batter")) + " Batter, " + convertToText(sprites.readDataNumber(Cooking_Items, "Bacon")) + " Bacon, " + convertToText(sprites.readDataNumber(Cooking_Items, "Egg")) + " Egg, " + convertToText(sprites.readDataNumber(Cooking_Items, "Milk")) + " Milk, " + convertToText(sprites.readDataNumber(Cooking_Items, "Strawberry")) + " Strawberry, " + convertToText(sprites.readDataNumber(Cooking_Items, "Blueberry")) + " Blueberry, and " + convertToText(sprites.readDataNumber(Cooking_Items, "Grape")) + " Grape.")
+                    if (game.ask("COMFIRM?", "Items used will be lost.")) {
+                        blockSettings.writeNumber("wheat", blockSettings.readNumber("wheat") - sprites.readDataNumber(Cooking_Items, "Wheat"))
+                        blockSettings.writeNumber("sugar", blockSettings.readNumber("sugar") - sprites.readDataNumber(Cooking_Items, "Sugar"))
+                        blockSettings.writeNumber("batter", blockSettings.readNumber("batter") - sprites.readDataNumber(Cooking_Items, "Batter"))
+                        blockSettings.writeNumber("bacon", blockSettings.readNumber("bacon") - sprites.readDataNumber(Cooking_Items, "Bacon"))
+                        blockSettings.writeNumber("egg", blockSettings.readNumber("egg") - sprites.readDataNumber(Cooking_Items, "Egg"))
+                        blockSettings.writeNumber("milk", blockSettings.readNumber("milk") - sprites.readDataNumber(Cooking_Items, "Milk"))
+                        blockSettings.writeNumber("strawberry", blockSettings.readNumber("strawberry") - sprites.readDataNumber(Cooking_Items, "Strawberry"))
+                        blockSettings.writeNumber("blueberry", blockSettings.readNumber("blueberry") - sprites.readDataNumber(Cooking_Items, "Blueberry"))
+                        blockSettings.writeNumber("grape", blockSettings.readNumber("grape") - sprites.readDataNumber(Cooking_Items, "Grape"))
+                        if (Cooking_Items__Recipe(1, 0, 0, 0, 0, 0, 0, 0, 0)) {
+                            Food_Item = sprites.create(img`
+                                . f f . . f f . 
+                                f e e f f e e f 
+                                f e e e e e e f 
+                                . f e e e e f . 
+                                . f e e e e f . 
+                                . f e e e e f . 
+                                . f e e e e f . 
+                                . . f f f f . . 
+                                `, SpriteKind.Food)
+                            sprites.setDataString(Food_Item, "Type", "toast")
+                        } else {
+                            Wrong_Combination = 1
+                        }
+                        if (!(Wrong_Combination == 1)) {
+                            tiles.placeOnRandomTile(Food_Item, assets.tile`myTile17`)
+                        } else {
+                            game.splash("THIS FOOD DOESN'T LOOK RIGHT...", "Whatever food you just made probably isn't edible. Try checking the recipes to the left of the fridge.")
+                        }
+                    }
+                }
+            }
         }
     }
 })
@@ -343,6 +400,16 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Info, function (sprite, otherSpr
         }
     }
 })
+function Cooking_Items__Recipe (wheat: number, sugar: number, batter: number, bacon: number, egg: number, milk: number, strawberry: number, blueberry: number, grape: number) {
+    return sprites.readDataNumber(Cooking_Items, "Wheat") == wheat && (sprites.readDataNumber(Cooking_Items, "Sugar") == sugar && sprites.readDataNumber(Cooking_Items, "Batter") == batter) && (sprites.readDataNumber(Cooking_Items, "Bacon") == bacon && (sprites.readDataNumber(Cooking_Items, "Egg") == egg && sprites.readDataNumber(Cooking_Items, "Milk") == milk) && (sprites.readDataNumber(Cooking_Items, "Strawberry") == strawberry && (sprites.readDataNumber(Cooking_Items, "Blueberry") == blueberry && sprites.readDataNumber(Cooking_Items, "Grape") == grape)))
+}
+function Input_1_Is_Between_Inputs_2_and_3 (num: number, num2: number, num3: number) {
+    if (num2 > num3) {
+        return num >= num3 && num <= num2
+    } else {
+        return num >= num2 && num <= num3
+    }
+}
 controller.menu.onEvent(ControllerButtonEvent.Pressed, function () {
     if (menu == 1) {
         if (game.ask("GO TO RESTAURANT?", "A = Confirm B = Cancel")) {
@@ -483,18 +550,39 @@ controller.menu.onEvent(ControllerButtonEvent.Pressed, function () {
         }
     }
 })
+function Reset_Cooking_Items () {
+    sprites.setDataNumber(Cooking_Items, "Wheat", 0)
+    sprites.setDataNumber(Cooking_Items, "Sugar", 0)
+    sprites.setDataNumber(Cooking_Items, "Batter", 0)
+    sprites.setDataNumber(Cooking_Items, "Bacon", 0)
+    sprites.setDataNumber(Cooking_Items, "Egg", 0)
+    sprites.setDataNumber(Cooking_Items, "Milk", 0)
+    sprites.setDataNumber(Cooking_Items, "Strawberry", 0)
+    sprites.setDataNumber(Cooking_Items, "Blueberry", 0)
+    sprites.setDataNumber(Cooking_Items, "Grape", 0)
+    sprites.setDataNumber(Cooking_Items, "Wheatv", blockSettings.readNumber("wheat"))
+    sprites.setDataNumber(Cooking_Items, "Sugarv", blockSettings.readNumber("sugar"))
+    sprites.setDataNumber(Cooking_Items, "Batterv", blockSettings.readNumber("batter"))
+    sprites.setDataNumber(Cooking_Items, "Baconv", blockSettings.readNumber("bacon"))
+    sprites.setDataNumber(Cooking_Items, "Eggv", blockSettings.readNumber("egg"))
+    sprites.setDataNumber(Cooking_Items, "Milkv", blockSettings.readNumber("milk"))
+    sprites.setDataNumber(Cooking_Items, "Strawberryv", blockSettings.readNumber("strawberry"))
+    sprites.setDataNumber(Cooking_Items, "Blueberryv", blockSettings.readNumber("blueberry"))
+    sprites.setDataNumber(Cooking_Items, "Grapev", blockSettings.readNumber("grape"))
+}
 let heldnum = 0
 let heldstring = ""
 let Person: Sprite = null
 let personimg: Image = null
 let persontype = 0
 let numofemptyspots = 0
+let Wrong_Combination = 0
+let Food_Item: Sprite = null
+let Cooking_Items: Sprite = null
 let see_recipe = ""
 let itemheld = 0
 let textSprite: TextSprite = null
 let mySprite: Sprite = null
-let LoadRow = 0
-let LoadCol = 0
 let numofspots = 0
 let menu = 0
 menu = 0
@@ -622,6 +710,84 @@ scene.setBackgroundImage(img`
     9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
     `)
 tiles.setCurrentTilemap(tileUtil.createSmallMap(tilemap`level1`))
+let LoadCol = 1
+let LoadRow = 8
+for (let index = 0; index < 6; index++) {
+    for (let index = 0; index < 18; index++) {
+        if (blockSettings.readNumber("soil at " + LoadCol + ", " + LoadRow) == 0) {
+            tiles.setTileAt(tiles.getTileLocation(LoadCol, LoadRow), assets.tile`myTile1`)
+        } else if (blockSettings.readNumber("soil at " + LoadCol + ", " + LoadRow) == 1) {
+            tiles.setTileAt(tiles.getTileLocation(LoadCol, LoadRow), assets.tile`myTile2`)
+        } else if (blockSettings.readNumber("soil at " + LoadCol + ", " + LoadRow) == 2) {
+            if (blockSettings.readNumber("growth at " + LoadCol + ", " + LoadRow) == 1) {
+                tiles.setTileAt(tiles.getTileLocation(LoadCol, LoadRow), assets.tile`myTile3`)
+            } else if (blockSettings.readNumber("growth at " + LoadCol + ", " + LoadRow) == 2) {
+                tiles.setTileAt(tiles.getTileLocation(LoadCol, LoadRow), assets.tile`myTile6`)
+            } else if (blockSettings.readNumber("growth at " + LoadCol + ", " + LoadRow) == 3) {
+                tiles.setTileAt(tiles.getTileLocation(LoadCol, LoadRow), assets.tile`myTile8`)
+            }
+        } else if (blockSettings.readNumber("soil at " + LoadCol + ", " + LoadRow) == 3) {
+            if (blockSettings.readNumber("growth at " + LoadCol + ", " + LoadRow) == 1) {
+                tiles.setTileAt(tiles.getTileLocation(LoadCol, LoadRow), assets.tile`myTile11`)
+            } else if (blockSettings.readNumber("growth at " + LoadCol + ", " + LoadRow) == 2) {
+                tiles.setTileAt(tiles.getTileLocation(LoadCol, LoadRow), assets.tile`myTile14`)
+            } else if (blockSettings.readNumber("growth at " + LoadCol + ", " + LoadRow) == 3) {
+                tiles.setTileAt(tiles.getTileLocation(LoadCol, LoadRow), assets.tile`myTile15`)
+            }
+        } else if (blockSettings.readNumber("soil at " + LoadCol + ", " + LoadRow) == 4) {
+            if (blockSettings.readNumber("growth at " + LoadCol + ", " + LoadRow) == 1) {
+                tiles.setTileAt(tiles.getTileLocation(LoadCol, LoadRow), assets.tile`myTile16`)
+            } else if (blockSettings.readNumber("growth at " + LoadCol + ", " + LoadRow) == 2) {
+                tiles.setTileAt(tiles.getTileLocation(LoadCol, LoadRow), assets.tile`myTile19`)
+            } else if (blockSettings.readNumber("growth at " + LoadCol + ", " + LoadRow) == 3) {
+                tiles.setTileAt(tiles.getTileLocation(LoadCol, LoadRow), assets.tile`myTile21`)
+            }
+        } else if (blockSettings.readNumber("soil at " + LoadCol + ", " + LoadRow) == 5) {
+            if (blockSettings.readNumber("growth at " + LoadCol + ", " + LoadRow) == 1) {
+                tiles.setTileAt(tiles.getTileLocation(LoadCol, LoadRow), assets.tile`myTile23`)
+            } else if (blockSettings.readNumber("growth at " + LoadCol + ", " + LoadRow) == 2) {
+                tiles.setTileAt(tiles.getTileLocation(LoadCol, LoadRow), assets.tile`myTile24`)
+            } else if (blockSettings.readNumber("growth at " + LoadCol + ", " + LoadRow) == 3) {
+                tiles.setTileAt(tiles.getTileLocation(LoadCol, LoadRow), assets.tile`myTile25`)
+            }
+        } else if (blockSettings.readNumber("soil at " + LoadCol + ", " + LoadRow) == 6) {
+            if (blockSettings.readNumber("growth at " + LoadCol + ", " + LoadRow) == 1) {
+                tiles.setTileAt(tiles.getTileLocation(LoadCol, LoadRow), assets.tile`myTile39`)
+            } else if (blockSettings.readNumber("growth at " + LoadCol + ", " + LoadRow) == 2) {
+                tiles.setTileAt(tiles.getTileLocation(LoadCol, LoadRow), assets.tile`myTile40`)
+            } else if (blockSettings.readNumber("growth at " + LoadCol + ", " + LoadRow) == 3) {
+                tiles.setTileAt(tiles.getTileLocation(LoadCol, LoadRow), assets.tile`myTile43`)
+            }
+        } else if (blockSettings.readNumber("soil at " + LoadCol + ", " + LoadRow) == 7) {
+            if (blockSettings.readNumber("growth at " + LoadCol + ", " + LoadRow) == 1) {
+                tiles.setTileAt(tiles.getTileLocation(LoadCol, LoadRow), assets.tile`myTile26`)
+            } else if (blockSettings.readNumber("growth at " + LoadCol + ", " + LoadRow) == 2) {
+                tiles.setTileAt(tiles.getTileLocation(LoadCol, LoadRow), assets.tile`myTile37`)
+            } else if (blockSettings.readNumber("growth at " + LoadCol + ", " + LoadRow) == 3) {
+                tiles.setTileAt(tiles.getTileLocation(LoadCol, LoadRow), assets.tile`myTile38`)
+            }
+        } else if (blockSettings.readNumber("soil at " + LoadCol + ", " + LoadRow) == 8) {
+            if (blockSettings.readNumber("growth at " + LoadCol + ", " + LoadRow) == 1) {
+                tiles.setTileAt(tiles.getTileLocation(LoadCol, LoadRow), assets.tile`myTile44`)
+            } else if (blockSettings.readNumber("growth at " + LoadCol + ", " + LoadRow) == 2) {
+                tiles.setTileAt(tiles.getTileLocation(LoadCol, LoadRow), assets.tile`myTile45`)
+            } else if (blockSettings.readNumber("growth at " + LoadCol + ", " + LoadRow) == 3) {
+                tiles.setTileAt(tiles.getTileLocation(LoadCol, LoadRow), assets.tile`myTile46`)
+            }
+        } else if (blockSettings.readNumber("soil at " + LoadCol + ", " + LoadRow) == 9) {
+            if (blockSettings.readNumber("growth at " + LoadCol + ", " + LoadRow) == 1) {
+                tiles.setTileAt(tiles.getTileLocation(LoadCol, LoadRow), assets.tile`myTile52`)
+            } else if (blockSettings.readNumber("growth at " + LoadCol + ", " + LoadRow) == 2) {
+                tiles.setTileAt(tiles.getTileLocation(LoadCol, LoadRow), assets.tile`myTile53`)
+            } else if (blockSettings.readNumber("growth at " + LoadCol + ", " + LoadRow) == 3) {
+                tiles.setTileAt(tiles.getTileLocation(LoadCol, LoadRow), assets.tile`myTile54`)
+            }
+        }
+        LoadCol += 1
+    }
+    LoadCol = 1
+    LoadRow += 1
+}
 if (blockSettings.exists("Played Before")) {
     story.showPlayerChoices("Continue", "New Game", "Reset Game")
 } else {
@@ -633,84 +799,7 @@ if (blockSettings.exists("Played Before")) {
     story.showPlayerChoices("New Game", "")
 }
 if (story.checkLastAnswer("Continue")) {
-    LoadCol = 1
-    LoadRow = 8
-    for (let index = 0; index < 6; index++) {
-        for (let index = 0; index < 18; index++) {
-            if (blockSettings.readNumber("soil at " + LoadCol + ", " + LoadRow) == 0) {
-                tiles.setTileAt(tiles.getTileLocation(LoadCol, LoadRow), assets.tile`myTile1`)
-            } else if (blockSettings.readNumber("soil at " + LoadCol + ", " + LoadRow) == 1) {
-                tiles.setTileAt(tiles.getTileLocation(LoadCol, LoadRow), assets.tile`myTile2`)
-            } else if (blockSettings.readNumber("soil at " + LoadCol + ", " + LoadRow) == 2) {
-                if (blockSettings.readNumber("growth at " + LoadCol + ", " + LoadRow) == 1) {
-                    tiles.setTileAt(tiles.getTileLocation(LoadCol, LoadRow), assets.tile`myTile3`)
-                } else if (blockSettings.readNumber("growth at " + LoadCol + ", " + LoadRow) == 2) {
-                    tiles.setTileAt(tiles.getTileLocation(LoadCol, LoadRow), assets.tile`myTile6`)
-                } else if (blockSettings.readNumber("growth at " + LoadCol + ", " + LoadRow) == 3) {
-                    tiles.setTileAt(tiles.getTileLocation(LoadCol, LoadRow), assets.tile`myTile8`)
-                }
-            } else if (blockSettings.readNumber("soil at " + LoadCol + ", " + LoadRow) == 3) {
-                if (blockSettings.readNumber("growth at " + LoadCol + ", " + LoadRow) == 1) {
-                    tiles.setTileAt(tiles.getTileLocation(LoadCol, LoadRow), assets.tile`myTile11`)
-                } else if (blockSettings.readNumber("growth at " + LoadCol + ", " + LoadRow) == 2) {
-                    tiles.setTileAt(tiles.getTileLocation(LoadCol, LoadRow), assets.tile`myTile14`)
-                } else if (blockSettings.readNumber("growth at " + LoadCol + ", " + LoadRow) == 3) {
-                    tiles.setTileAt(tiles.getTileLocation(LoadCol, LoadRow), assets.tile`myTile15`)
-                }
-            } else if (blockSettings.readNumber("soil at " + LoadCol + ", " + LoadRow) == 4) {
-                if (blockSettings.readNumber("growth at " + LoadCol + ", " + LoadRow) == 1) {
-                    tiles.setTileAt(tiles.getTileLocation(LoadCol, LoadRow), assets.tile`myTile16`)
-                } else if (blockSettings.readNumber("growth at " + LoadCol + ", " + LoadRow) == 2) {
-                    tiles.setTileAt(tiles.getTileLocation(LoadCol, LoadRow), assets.tile`myTile19`)
-                } else if (blockSettings.readNumber("growth at " + LoadCol + ", " + LoadRow) == 3) {
-                    tiles.setTileAt(tiles.getTileLocation(LoadCol, LoadRow), assets.tile`myTile21`)
-                }
-            } else if (blockSettings.readNumber("soil at " + LoadCol + ", " + LoadRow) == 5) {
-                if (blockSettings.readNumber("growth at " + LoadCol + ", " + LoadRow) == 1) {
-                    tiles.setTileAt(tiles.getTileLocation(LoadCol, LoadRow), assets.tile`myTile23`)
-                } else if (blockSettings.readNumber("growth at " + LoadCol + ", " + LoadRow) == 2) {
-                    tiles.setTileAt(tiles.getTileLocation(LoadCol, LoadRow), assets.tile`myTile24`)
-                } else if (blockSettings.readNumber("growth at " + LoadCol + ", " + LoadRow) == 3) {
-                    tiles.setTileAt(tiles.getTileLocation(LoadCol, LoadRow), assets.tile`myTile25`)
-                }
-            } else if (blockSettings.readNumber("soil at " + LoadCol + ", " + LoadRow) == 6) {
-                if (blockSettings.readNumber("growth at " + LoadCol + ", " + LoadRow) == 1) {
-                    tiles.setTileAt(tiles.getTileLocation(LoadCol, LoadRow), assets.tile`myTile39`)
-                } else if (blockSettings.readNumber("growth at " + LoadCol + ", " + LoadRow) == 2) {
-                    tiles.setTileAt(tiles.getTileLocation(LoadCol, LoadRow), assets.tile`myTile40`)
-                } else if (blockSettings.readNumber("growth at " + LoadCol + ", " + LoadRow) == 3) {
-                    tiles.setTileAt(tiles.getTileLocation(LoadCol, LoadRow), assets.tile`myTile43`)
-                }
-            } else if (blockSettings.readNumber("soil at " + LoadCol + ", " + LoadRow) == 7) {
-                if (blockSettings.readNumber("growth at " + LoadCol + ", " + LoadRow) == 1) {
-                    tiles.setTileAt(tiles.getTileLocation(LoadCol, LoadRow), assets.tile`myTile26`)
-                } else if (blockSettings.readNumber("growth at " + LoadCol + ", " + LoadRow) == 2) {
-                    tiles.setTileAt(tiles.getTileLocation(LoadCol, LoadRow), assets.tile`myTile37`)
-                } else if (blockSettings.readNumber("growth at " + LoadCol + ", " + LoadRow) == 3) {
-                    tiles.setTileAt(tiles.getTileLocation(LoadCol, LoadRow), assets.tile`myTile38`)
-                }
-            } else if (blockSettings.readNumber("soil at " + LoadCol + ", " + LoadRow) == 8) {
-                if (blockSettings.readNumber("growth at " + LoadCol + ", " + LoadRow) == 1) {
-                    tiles.setTileAt(tiles.getTileLocation(LoadCol, LoadRow), assets.tile`myTile44`)
-                } else if (blockSettings.readNumber("growth at " + LoadCol + ", " + LoadRow) == 2) {
-                    tiles.setTileAt(tiles.getTileLocation(LoadCol, LoadRow), assets.tile`myTile45`)
-                } else if (blockSettings.readNumber("growth at " + LoadCol + ", " + LoadRow) == 3) {
-                    tiles.setTileAt(tiles.getTileLocation(LoadCol, LoadRow), assets.tile`myTile46`)
-                }
-            } else if (blockSettings.readNumber("soil at " + LoadCol + ", " + LoadRow) == 9) {
-                if (blockSettings.readNumber("growth at " + LoadCol + ", " + LoadRow) == 1) {
-                    tiles.setTileAt(tiles.getTileLocation(LoadCol, LoadRow), assets.tile`myTile52`)
-                } else if (blockSettings.readNumber("growth at " + LoadCol + ", " + LoadRow) == 2) {
-                    tiles.setTileAt(tiles.getTileLocation(LoadCol, LoadRow), assets.tile`myTile53`)
-                } else if (blockSettings.readNumber("growth at " + LoadCol + ", " + LoadRow) == 3) {
-                    tiles.setTileAt(tiles.getTileLocation(LoadCol, LoadRow), assets.tile`myTile54`)
-                }
-            }
-            LoadCol += 1
-        }
-        LoadCol = 1
-        LoadRow += 1
-    }
+	
 } else if (story.checkLastAnswer("New Game")) {
     blockSettings.clear()
     blockSettings.writeNumber("Played Before", 1)
